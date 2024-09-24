@@ -15,12 +15,12 @@ public class MasterController : ControllerBase
 
 //Get value from db
     [HttpGet]
-    public async Task<ActionResult<IEnumerable<Master>>> GetMaster(){
+    public async Task<ActionResult<IEnumerable<MasterModel>>> GetMaster(){
     return await _context.Masters.ToListAsync();
     }
 
     [HttpGet("active/{active:bool}")] // Ensure the route is defined to accept bool
-    public async Task<ActionResult<List<Master>>> GetMasterByStatus([FromQuery]bool active){
+    public async Task<ActionResult<List<MasterModel>>> GetMasterByStatus([FromQuery]bool active){
         var masters = await _context.Masters
             .Where(e => e.Active == active)
             .ToListAsync();
@@ -35,7 +35,7 @@ public class MasterController : ControllerBase
 
 //Post master value to db
     [HttpPost]
-    public async Task<ActionResult<Master>> PostMaster(Master master){
+    public async Task<ActionResult<MasterModel>> PostMaster(MasterModel master){
 
         //Check if value is exist
         if (await _context.Masters.AnyAsync(e => e.MasterID == master.MasterID))
@@ -46,8 +46,7 @@ public class MasterController : ControllerBase
         else if (await _context.Masters.AnyAsync(e => e.Condition == master.Condition)){
 
             //Check value condition
-            if (await _context.Masters.AnyAsync(e => e.NoSr == master.NoSr))
-            {
+            if (await _context.Masters.AnyAsync(e => e.NoSr == master.NoSr)){
                 return Conflict("This Item ID already exists in this condition");
             }
         }
@@ -59,7 +58,7 @@ public class MasterController : ControllerBase
 
 //Update value master to db    
     [HttpPut("{masterID:int}")]
-    public async Task<IActionResult> PutMaster(int masterID, Master master){
+    public async Task<IActionResult> PutMaster(int masterID, MasterModel master){
         if (masterID != master.MasterID){
             return BadRequest();
         }

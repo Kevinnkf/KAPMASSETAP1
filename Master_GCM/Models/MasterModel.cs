@@ -1,4 +1,4 @@
-public class Master{
+public class MasterModel{
     public int MasterID{ get; set; }
     public required string Condition { get; set; }
     public required int NoSr { get; set; }
